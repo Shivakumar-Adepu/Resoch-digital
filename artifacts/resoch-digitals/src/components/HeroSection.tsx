@@ -1,9 +1,7 @@
 import { useEffect, useRef } from "react";
 
-const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-
-const DESKTOP_SRC = `${base}/images/hero-desktop.mp4`;
-const MOBILE_SRC = `${base}/images/hero-mobile.mp4`;
+const DESKTOP_SRC = "/api/video/hero-desktop.mp4";
+const MOBILE_SRC = "/api/video/hero-mobile.mp4";
 
 function HeroVideo({
   src,

@@ -24,7 +24,7 @@ function PacMan({ size = 64 }: { size?: number }) {
           position: "absolute",
           inset: -4,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(255,200,0,0.35) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(255,136,88,0.4) 0%, transparent 70%)",
           pointerEvents: "none",
         }}
         animate={{ opacity: [0.5, 1, 0.5] }}
@@ -39,7 +39,7 @@ function PacMan({ size = 64 }: { size?: number }) {
           left: 0,
           width: "100%",
           height: half,
-          background: "#FFC800",
+          background: "#FF8858",
           borderRadius: `${half}px ${half}px 0 0`,
           transformOrigin: "50% 100%",
         }}
@@ -55,7 +55,7 @@ function PacMan({ size = 64 }: { size?: number }) {
           left: 0,
           width: "100%",
           height: half,
-          background: "#FFC800",
+          background: "#FF8858",
           borderRadius: `0 0 ${half}px ${half}px`,
           transformOrigin: "50% 0%",
         }}
