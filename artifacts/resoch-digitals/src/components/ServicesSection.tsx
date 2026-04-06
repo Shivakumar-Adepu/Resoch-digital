@@ -108,7 +108,7 @@ export default function ServicesSection() {
               >
                 <div className="relative aspect-square overflow-hidden bg-black">
 
-                  {/* ── Layer 1: Black & White image (always present, fades OUT on hover) ── */}
+                  {/* ── Layer 1: Black & White (default, hidden instantly on hover) ── */}
                   <img
                     src={service.image}
                     alt=""
@@ -118,13 +118,11 @@ export default function ServicesSection() {
                     style={{
                       filter: "grayscale(100%) brightness(0.65)",
                       opacity: isLit ? 0 : 1,
-                      transform: isLit ? "scale(1.06)" : "scale(1)",
-                      transition: "opacity 0.5s ease, transform 0.6s ease",
-                      willChange: "opacity, transform",
+                      transition: "none",
                     }}
                   />
 
-                  {/* ── Layer 2: Full Colour image (fades IN on hover) ── */}
+                  {/* ── Layer 2: Full Colour (appears instantly on hover) ── */}
                   <img
                     src={service.image}
                     alt={service.name}
@@ -133,9 +131,7 @@ export default function ServicesSection() {
                     style={{
                       filter: "grayscale(0%) brightness(1.05)",
                       opacity: isLit ? 1 : 0,
-                      transform: isLit ? "scale(1.06)" : "scale(1)",
-                      transition: "opacity 0.5s ease, transform 0.6s ease",
-                      willChange: "opacity, transform",
+                      transition: "none",
                     }}
                   />
 
