@@ -5,11 +5,13 @@ import { fileURLToPath } from "url";
 
 const router = Router();
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 const ALLOWED = new Set(["hero-desktop.mp4", "hero-mobile.mp4"]);
 
-const VIDEO_DIR = path.resolve(__dirname, "../../../../artifacts/resoch-digitals/public/images");
+/* ESBuild bundles everything into dist/index.mjs so import.meta.url is always
+   that file's location — 3 levels up reaches the workspace root. */
+const __distDir = path.dirname(fileURLToPath(import.meta.url));
+const WORKSPACE_ROOT = path.resolve(__distDir, "../../..");
+const VIDEO_DIR = path.join(WORKSPACE_ROOT, "artifacts/resoch-digitals/public/images");
 
 router.get("/video/:filename", (req, res) => {
   const { filename } = req.params;
@@ -22,7 +24,7 @@ router.get("/video/:filename", (req, res) => {
   const filePath = path.join(VIDEO_DIR, filename);
 
   if (!fs.existsSync(filePath)) {
-    res.status(404).json({ error: "File not found" });
+    res.status(404).json({ error: "File not found", resolved: filePath });
     return;
   }
 
@@ -43,9 +45,7 @@ router.get("/video/:filename", (req, res) => {
     res.status(206);
     res.setHeader("Content-Range", `bytes ${start}-${end}/${fileSize}`);
     res.setHeader("Content-Length", chunkSize);
-
-    const stream = fs.createReadStream(filePath, { start, end });
-    stream.pipe(res);
+    fs.createReadStream(filePath, { start, end }).pipe(res);
   } else {
     res.setHeader("Content-Length", fileSize);
     fs.createReadStream(filePath).pipe(res);
