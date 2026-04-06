@@ -9,7 +9,8 @@ const services = [
     role: "Social Media Strategy",
     tagline: "Rethinking 'Content' as 'Culture'",
     desc: "Moving faster than the speed of the algorithm, this speedster spots viral waves before they crest. Armed with Omni-Present vision, they dominate every timeline. Arch-nemesis: 'The Cringe.'",
-    image: "/images/team/trend-surfer.png",
+    imageBW: "/images/team/trend-surfer-bw.jpg",
+    imageColor: "/images/team/trend-surfer-color.jpg",
   },
   {
     number: "02",
@@ -17,7 +18,8 @@ const services = [
     role: "Copy & Design Production",
     tagline: "Rethinking 'Content' as 'Investment'",
     desc: "Using psionic aesthetics and telepathic headlines, this illusionist seizes total control of the user's attention. Battles 'Boring Content' with a single, mind-bending snap.",
-    image: "/images/team/doctor-hypnosis.png",
+    imageBW: "/images/team/doctor-hypnosis.png",
+    imageColor: "/images/team/doctor-hypnosis.png",
   },
   {
     number: "03",
@@ -25,7 +27,8 @@ const services = [
     role: "Visual Production",
     tagline: "Rethinking 'Videos' as 'Experiences'",
     desc: "Wielding a lens forged from pure cinematic power, they bend mundane reality into blockbuster epics. Origin story: fell into a vat of 4K resolution.",
-    image: "/images/team/reality-warper.png",
+    imageBW: "/images/team/reality-warper.png",
+    imageColor: "/images/team/reality-warper.png",
   },
   {
     number: "04",
@@ -33,7 +36,8 @@ const services = [
     role: "SEO",
     tagline: "Rethinking 'Search' as 'Answers'",
     desc: "A master of stealth who lurks in the digital backend, hacking the Google Matrix. Infiltrates Page One silently, neutralizing competitors.",
-    image: "/images/team/shadow-operative.png",
+    imageBW: "/images/team/shadow-operative.png",
+    imageColor: "/images/team/shadow-operative.png",
   },
   {
     number: "05",
@@ -41,7 +45,8 @@ const services = [
     role: "Performance Marketing",
     tagline: "Rethinking 'Spend' as 'Investment'",
     desc: "Bionic aim locked on ROI, targeting high-value leads with zero wasted ammo on vanity metrics. Surgical precision ad spend.",
-    image: "/images/team/cyber-sniper.png",
+    imageBW: "/images/team/cyber-sniper.png",
+    imageColor: "/images/team/cyber-sniper.png",
   },
   {
     number: "06",
@@ -49,7 +54,8 @@ const services = [
     role: "Brand Management",
     tagline: "Your reputation, on a strategy",
     desc: "The indestructible shield-bearer, standing firm against internet negativity and cancel culture. Deploys Reputation Forcefield against PR disasters.",
-    image: "/images/team/captain-aegis.png",
+    imageBW: "/images/team/captain-aegis.png",
+    imageColor: "/images/team/captain-aegis.png",
   },
   {
     number: "07",
@@ -57,7 +63,8 @@ const services = [
     role: "Web Development",
     tagline: "More than a pretty face. A 24/7 salesperson.",
     desc: "If your site is mid, your customers are ghosting. We build aesthetic, glitch-free interfaces that pass the vibe check and secure the bag.",
-    image: "/images/team/web-developer.png",
+    imageBW: "/images/team/web-developer.png",
+    imageColor: "/images/team/web-developer.png",
   },
 ];
 
@@ -108,28 +115,30 @@ export default function ServicesSection() {
               >
                 <div className="relative aspect-square overflow-hidden bg-black">
 
-                  {/* ── Layer 1: Black & White (default, hidden instantly on hover) ── */}
+                  {/* ── Layer 1: B&W image (default) ── */}
                   <img
-                    src={service.image}
+                    src={service.imageBW}
                     alt=""
                     aria-hidden
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover"
                     style={{
-                      filter: "grayscale(100%) brightness(0.65)",
+                      filter: "grayscale(100%) brightness(0.7)",
                       opacity: isLit ? 0 : 1,
                       transition: "none",
                     }}
                   />
 
-                  {/* ── Layer 2: Full Colour (appears instantly on hover) ── */}
+                  {/* ── Layer 2: Colour image (shown on hover) ── */}
                   <img
-                    src={service.image}
+                    src={service.imageColor}
                     alt={service.name}
                     loading="lazy"
                     className="absolute inset-0 w-full h-full object-cover"
                     style={{
-                      filter: "grayscale(0%) brightness(1.05)",
+                      filter: service.imageBW !== service.imageColor
+                        ? "sepia(55%) saturate(2.2) hue-rotate(-8deg) brightness(1.1)"
+                        : "none",
                       opacity: isLit ? 1 : 0,
                       transition: "none",
                     }}
@@ -206,8 +215,16 @@ export default function ServicesSection() {
 
                 <div className="flex flex-col md:flex-row">
                   <div className="w-full md:w-48 shrink-0 aspect-square relative">
-                    {/* Modal shows full-colour image */}
-                    <img src={active.image} alt={active.name} className="w-full h-full object-cover" />
+                    <img
+                      src={active.imageColor}
+                      alt={active.name}
+                      className="w-full h-full object-cover"
+                      style={{
+                        filter: active.imageBW !== active.imageColor
+                          ? "sepia(55%) saturate(2.2) hue-rotate(-8deg) brightness(1.1)"
+                          : "none",
+                      }}
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent md:bg-gradient-to-r" />
                   </div>
 
