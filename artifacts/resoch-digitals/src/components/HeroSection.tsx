@@ -21,7 +21,7 @@ export default function HeroSection() {
         {/* To use YOUR OWN VIDEO: upload your .mp4 file to artifacts/resoch-digitals/public/
             and change the src below to "/hero-intro.mp4" */}
         <source
-          src="https://videos.pexels.com/video-files/3141207/3141207-uhd_2560_1440_25fps.mp4"
+          src="/images/motion%20horizontal.mp4"
           type="video/mp4"
         />
         {/* Fallback: if the video above fails to load, the black background shows */}
