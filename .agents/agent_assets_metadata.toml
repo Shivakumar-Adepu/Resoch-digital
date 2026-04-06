@@ -1,5 +1,46 @@
 uploads = []
-generated = []
+
+[[generated]]
+id = "favM2c1vym142iNcbHIdM"
+uri = "file://artifacts/resoch-digitals/public/images/team/trend-surfer.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "UKtB_IDP6m_5IwlWu2tC7"
+uri = "file://artifacts/resoch-digitals/public/images/team/doctor-hypnosis.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "vIgQI6WOa2ESfIsP1tRjQ"
+uri = "file://artifacts/resoch-digitals/public/images/team/reality-warper.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "_v4_mAW5Hsbc1kaLU8ok2"
+uri = "file://artifacts/resoch-digitals/public/images/team/shadow-operative.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "huukJkVVoGg8XbVommKR1"
+uri = "file://artifacts/resoch-digitals/public/images/team/cyber-sniper.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "Udz9IMUB_5ePsA269HqAN"
+uri = "file://artifacts/resoch-digitals/public/images/team/captain-aegis.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "VqsxkOSjr7HmOBGirBtPD"
+uri = "file://artifacts/resoch-digitals/public/images/team/web-developer.png"
+type = "image"
+title = "generated_image"
 
 [[outputs]]
 id = "3KiTWMRQP70cRhM4e7vUn"
