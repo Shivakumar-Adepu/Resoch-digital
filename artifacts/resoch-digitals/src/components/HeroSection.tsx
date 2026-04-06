@@ -1,10 +1,9 @@
 import { useEffect, useRef } from "react";
 
-/* Vite replaces import.meta.env.BASE_URL with the actual base path at build time */
-const base = import.meta.env.BASE_URL.replace(/\/$/, ""); // remove trailing slash
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-const DESKTOP_SRC = `${base}/images/all_views_motion%20horizontal.mp4`;
-const MOBILE_SRC = `${base}/images/mobile_view_resoch%20motion_3.mp4`;
+const DESKTOP_SRC = `${base}/images/hero-desktop.mp4`;
+const MOBILE_SRC = `${base}/images/hero-mobile.mp4`;
 
 function HeroVideo({
   src,
@@ -21,10 +20,8 @@ function HeroVideo({
     const video = videoRef.current;
     if (!video) return;
 
-    /* Attempt play — some browsers block autoplay until user interaction */
     const attemptPlay = () => {
       video.play().catch(() => {
-        /* If blocked, try again once the user touches/clicks anywhere */
         const resume = () => {
           video.play().catch(() => {});
           document.removeEventListener("click", resume);
@@ -49,7 +46,6 @@ function HeroVideo({
   return (
     <video
       ref={videoRef}
-      src={src}
       autoPlay
       muted
       loop
@@ -57,7 +53,9 @@ function HeroVideo({
       preload="auto"
       className={className}
       data-testid={testId}
-    />
+    >
+      <source src={src} type="video/mp4" />
+    </video>
   );
 }
 
