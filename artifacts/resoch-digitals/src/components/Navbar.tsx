@@ -54,8 +54,7 @@ export default function Navbar() {
             className="text-2xl font-serif font-bold tracking-tighter"
             data-testid="link-logo"
           >
-            <span className="text-white">Re.Soch</span>
-            <span className="text-primary">.Digitals</span>
+            <span className="text-white">Re.</span><span className="text-primary">Soch</span>
           </a>
 
           {/* Desktop Nav */}
@@ -133,9 +132,8 @@ export default function Navbar() {
               </motion.a>
             </div>
 
-            <div className="absolute bottom-10 flex space-x-2 text-white/30 text-sm">
-              <span>Re.Soch</span>
-              <span className="text-primary">.Digitals</span>
+            <div className="absolute bottom-10 text-white/30 text-sm font-serif font-bold">
+              <span>Re.</span><span className="text-primary/40">Soch</span>
             </div>
           </motion.div>
         )}
