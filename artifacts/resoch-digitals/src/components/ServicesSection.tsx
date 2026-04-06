@@ -66,186 +66,161 @@ export default function ServicesSection() {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const active = activeId !== null ? services[activeId] : null;
 
-  /* A card is "lit" (colorful) when it is hovered OR selected */
   const isLit = (i: number) => hoveredId === i || activeId === i;
 
   return (
-    <section id="services" className="py-20 md:py-32 bg-black relative overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.025] bg-[linear-gradient(#FF8858_1px,transparent_1px),linear-gradient(90deg,#FF8858_1px,transparent_1px)] bg-[size:40px_40px]" />
+    <section id="services" className="py-16 md:py-28 bg-black relative overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.02] bg-[linear-gradient(#FF8858_1px,transparent_1px),linear-gradient(90deg,#FF8858_1px,transparent_1px)] bg-[size:40px_40px]" />
 
-      <div className="container mx-auto px-5 md:px-8 max-w-7xl relative z-10">
+      <div className="container mx-auto px-4 md:px-8 max-w-7xl relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-12 md:mb-16"
+          className="mb-8 md:mb-14"
         >
-          <p className="text-primary text-xs font-bold uppercase tracking-widest mb-3">Our Services</p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white">
+          <p className="text-primary text-[11px] font-bold uppercase tracking-widest mb-2">Our Services</p>
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-white">
             Meet the Team.
           </h2>
-          <p className="text-white/50 mt-3 text-sm md:text-base">
-            Hover or tap a character to reveal them in full colour.
+          <p className="text-white/40 mt-2 text-xs md:text-sm">
+            Tap a character to learn more.
           </p>
         </motion.div>
 
-        {/* Card Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+        {/* Card Grid — CSS-based grayscale (no heavy JS filter animation on mobile) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
           {services.map((service, i) => (
             <motion.button
               key={i}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-30px" }}
-              transition={{ delay: i * 0.06, duration: 0.4 }}
-              /* Pointer events — covers desktop hover & mobile touch */
+              viewport={{ once: true, margin: "-20px" }}
+              transition={{ delay: i * 0.05, duration: 0.35 }}
               onPointerEnter={() => setHoveredId(i)}
               onPointerLeave={() => setHoveredId(null)}
               onClick={() => {
                 setActiveId(i);
                 setHoveredId(null);
               }}
-              className={`group relative rounded-xl overflow-hidden border text-left cursor-pointer transition-all duration-300 focus:outline-none ${
+              className={`group relative rounded-xl overflow-hidden border text-left cursor-pointer focus:outline-none transition-colors duration-300 ${
                 isLit(i)
-                  ? "border-primary shadow-[0_0_28px_rgba(255,136,88,0.4)]"
-                  : "border-white/10 hover:border-primary/40"
+                  ? "border-primary"
+                  : "border-white/10"
               }`}
               data-testid={`card-service-${i}`}
               aria-label={`${service.name} – ${service.role}`}
             >
-              {/* Character Illustration with grayscale ↔ colour transition */}
+              {/* Image — CSS grayscale for smooth GPU-accelerated transition on all devices */}
               <div className="relative aspect-square overflow-hidden bg-black">
-                <motion.img
+                <img
                   src={service.image}
                   alt={service.name}
                   loading="lazy"
-                  className="w-full h-full object-cover"
-                  /* Framer-motion handles the filter smoothly on every device */
-                  animate={{
-                    filter: isLit(i) ? "grayscale(0%) brightness(1.05)" : "grayscale(100%) brightness(0.85)",
-                    scale: isLit(i) ? 1.06 : 1,
-                  }}
-                  transition={{ duration: 0.55, ease: "easeOut" }}
+                  className={`w-full h-full object-cover transition-all duration-500 ease-out will-change-[filter,transform] ${
+                    isLit(i)
+                      ? "grayscale-0 scale-105 brightness-105"
+                      : "grayscale brightness-75"
+                  }`}
                 />
 
-                {/* Gradient overlay — slightly stronger when greyscale */}
-                <motion.div
-                  animate={{ opacity: isLit(i) ? 0.55 : 0.75 }}
-                  transition={{ duration: 0.45 }}
-                  className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"
-                />
-
-                {/* Orange glow ring that appears on lit state */}
-                <motion.div
-                  animate={{ opacity: isLit(i) ? 1 : 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="absolute inset-0 ring-inset ring-2 ring-primary/40 rounded-xl pointer-events-none"
-                />
+                {/* Dark gradient — fade at bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
 
                 {/* Number badge */}
-                <span className="absolute top-3 left-3 text-xs font-mono font-bold text-primary/70 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded-full">
+                <span className="absolute top-2 left-2 text-[10px] font-mono font-bold text-primary/80 bg-black/60 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
                   {service.number}
                 </span>
 
-                {/* Colour reveal label — only shows when lit */}
-                <AnimatePresence>
-                  {isLit(i) && (
-                    <motion.span
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 6 }}
-                      transition={{ duration: 0.25 }}
-                      className="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-widest text-black bg-primary px-2 py-0.5 rounded-full"
-                    >
-                      Tap to view
-                    </motion.span>
-                  )}
-                </AnimatePresence>
+                {/* Orange border glow — only on lit */}
+                <div
+                  className={`absolute inset-0 transition-opacity duration-400 pointer-events-none ring-inset ring-2 ring-primary/50 rounded-xl ${
+                    isLit(i) ? "opacity-100" : "opacity-0"
+                  }`}
+                />
               </div>
 
-              {/* Info below image */}
-              <div className="p-3 md:p-4 bg-black">
-                <p className="text-primary text-[10px] md:text-xs font-bold uppercase tracking-widest mb-1 truncate">
+              {/* Label */}
+              <div className="p-2.5 md:p-4 bg-black">
+                <p className="text-primary text-[9px] md:text-xs font-bold uppercase tracking-widest mb-0.5 truncate">
                   {service.role}
                 </p>
-                <motion.h3
-                  animate={{ color: isLit(i) ? "#FF8858" : "#ffffff" }}
-                  transition={{ duration: 0.4 }}
-                  className="text-sm md:text-base lg:text-lg font-serif font-bold leading-snug"
+                <h3
+                  className={`text-xs md:text-base lg:text-lg font-serif font-bold leading-snug transition-colors duration-300 ${
+                    isLit(i) ? "text-primary" : "text-white"
+                  }`}
                 >
                   {service.name}
-                </motion.h3>
+                </h3>
               </div>
             </motion.button>
           ))}
         </div>
       </div>
 
-      {/* Detail Modal / Bottom Sheet */}
+      {/* Detail Panel — bottom sheet on mobile, centered modal on desktop */}
       <AnimatePresence>
         {active !== null && activeId !== null && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={() => setActiveId(null)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/75 backdrop-blur-sm z-40"
             />
 
-            {/* Modal */}
             <motion.div
-              initial={{ opacity: 0, y: 80, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 80, scale: 0.96 }}
-              transition={{ type: "spring", damping: 26, stiffness: 300 }}
-              className="fixed bottom-0 left-0 right-0 md:inset-0 md:flex md:items-center md:justify-center z-50 md:p-6"
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0 }}
+              transition={{ type: "spring", damping: 30, stiffness: 320 }}
+              className="fixed bottom-0 left-0 right-0 z-50 md:inset-0 md:flex md:items-center md:justify-center md:p-6"
             >
-              <div className="relative bg-[#0a0a0a] border border-white/10 md:border-primary/30 rounded-t-3xl md:rounded-2xl overflow-hidden w-full md:max-w-2xl md:shadow-[0_0_60px_rgba(255,136,88,0.25)]">
+              <div className="relative bg-[#0d0d0d] border-t border-white/10 md:border md:border-primary/30 rounded-t-2xl md:rounded-2xl overflow-hidden w-full md:max-w-xl max-h-[90vh] md:max-h-none overflow-y-auto md:overflow-visible">
+                {/* Drag pill */}
+                <div className="md:hidden sticky top-0 bg-[#0d0d0d] pt-3 pb-1 flex justify-center z-10">
+                  <div className="w-9 h-1 bg-white/25 rounded-full" />
+                </div>
+
                 {/* Close */}
                 <button
                   onClick={() => setActiveId(null)}
-                  className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-primary hover:text-black flex items-center justify-center transition-all duration-200 text-white"
+                  className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black transition-all duration-200"
                   aria-label="Close"
                 >
-                  <X size={18} />
+                  <X size={16} />
                 </button>
 
-                {/* Drag handle (mobile) */}
-                <div className="md:hidden w-10 h-1 bg-white/20 rounded-full mx-auto mt-3" />
-
                 <div className="flex flex-col md:flex-row">
-                  {/* Full-colour image in modal (always colour) */}
-                  <div className="w-full md:w-52 lg:w-60 shrink-0 aspect-square md:aspect-auto relative">
-                    <motion.img
+                  {/* Square image */}
+                  <div className="w-full md:w-48 shrink-0 aspect-square relative">
+                    <img
                       src={active.image}
                       alt={active.name}
-                      initial={{ filter: "grayscale(100%)" }}
-                      animate={{ filter: "grayscale(0%)" }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent md:bg-gradient-to-r" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent md:bg-gradient-to-r" />
                   </div>
 
-                  {/* Content */}
-                  <div className="p-6 md:p-8 flex flex-col justify-center">
-                    <span className="text-primary text-xs font-bold uppercase tracking-widest mb-2">
+                  {/* Text */}
+                  <div className="p-5 md:p-7 flex flex-col justify-center">
+                    <span className="text-primary text-[10px] font-bold uppercase tracking-widest mb-1">
                       {active.number} — {active.role}
                     </span>
-                    <h3 className="text-2xl md:text-3xl font-serif font-bold text-white mb-2">
+                    <h3 className="text-xl md:text-2xl font-serif font-bold text-white mb-1">
                       {active.name}
                     </h3>
-                    <p className="text-primary/80 italic text-sm mb-4">"{active.tagline}"</p>
-                    <p className="text-white/70 text-sm md:text-base leading-relaxed mb-6">
+                    <p className="text-primary/70 italic text-xs md:text-sm mb-3">"{active.tagline}"</p>
+                    <p className="text-white/65 text-sm leading-relaxed mb-5">
                       {active.desc}
                     </p>
                     <a
                       href="#contact"
                       onClick={() => setActiveId(null)}
-                      className="inline-flex items-center gap-2 bg-primary text-black font-bold px-6 py-3 rounded-full text-sm hover:bg-white transition-colors duration-300 self-start"
+                      className="inline-flex items-center gap-2 bg-primary text-black font-bold px-5 py-2.5 rounded-full text-sm hover:bg-white transition-colors duration-300 self-start"
                     >
                       Work with us →
                     </a>

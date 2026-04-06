@@ -4,203 +4,163 @@ import { SiInstagram, SiX, SiYoutube } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa";
 
 export default function ContactSection() {
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    service: "",
-    message: ""
-  });
+  const [formState, setFormState] = useState({ name: "", email: "", service: "", message: "" });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errors, setErrors] = useState<Record<string, boolean>>({});
 
   const validate = () => {
-    const newErrors: Record<string, boolean> = {};
-    if (!formState.name) newErrors.name = true;
-    if (!formState.email || !/^\S+@\S+\.\S+$/.test(formState.email)) newErrors.email = true;
-    if (!formState.service) newErrors.service = true;
-    if (!formState.message) newErrors.message = true;
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const e: Record<string, boolean> = {};
+    if (!formState.name) e.name = true;
+    if (!formState.email || !/^\S+@\S+\.\S+$/.test(formState.email)) e.email = true;
+    if (!formState.service) e.service = true;
+    if (!formState.message) e.message = true;
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (ev: React.FormEvent) => {
+    ev.preventDefault();
     if (!validate()) return;
-    
     setStatus("loading");
-    // Simulate API call
     setTimeout(() => {
       setStatus("success");
       setFormState({ name: "", email: "", service: "", message: "" });
     }, 1500);
   };
 
+  const inputBase =
+    "w-full bg-transparent border text-white text-sm px-4 py-3.5 rounded-xl focus:outline-none focus:ring-1 focus:ring-primary transition-colors placeholder:text-white/35";
+
   return (
-    <section id="contact" className="py-24 md:py-32 bg-black border-t border-white/10 relative">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section id="contact" className="py-16 md:py-28 bg-black border-t border-white/10 relative">
+      <div className="container mx-auto px-4 md:px-8 max-w-5xl">
+        {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-16"
+          className="mb-8 md:mb-12"
         >
-          {/* Form Side */}
-          <div>
-            <h2 className="text-5xl md:text-6xl font-serif font-bold text-white mb-8">
-              Let's <span className="text-primary">Talk.</span>
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-6" data-testid="form-contact">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-              >
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={formState.name}
-                  onChange={(e) => {
-                    setFormState({ ...formState, name: e.target.value });
-                    if (errors.name) setErrors({ ...errors, name: false });
-                  }}
-                  className={`w-full bg-black border ${errors.name ? 'border-red-500' : 'border-white/20'} text-white px-4 py-4 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors`}
-                  data-testid="input-name"
-                />
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={formState.email}
-                  onChange={(e) => {
-                    setFormState({ ...formState, email: e.target.value });
-                    if (errors.email) setErrors({ ...errors, email: false });
-                  }}
-                  className={`w-full bg-black border ${errors.email ? 'border-red-500' : 'border-white/20'} text-white px-4 py-4 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors`}
-                  data-testid="input-email"
-                />
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-              >
-                <select
-                  value={formState.service}
-                  onChange={(e) => {
-                    setFormState({ ...formState, service: e.target.value });
-                    if (errors.service) setErrors({ ...errors, service: false });
-                  }}
-                  className={`w-full bg-black border ${errors.service ? 'border-red-500' : 'border-white/20'} text-white/70 px-4 py-4 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors appearance-none`}
-                  data-testid="input-service"
-                >
-                  <option value="" disabled>Select Service</option>
-                  <option value="Social Media">Social Media</option>
-                  <option value="Copy & Design">Copy & Design</option>
-                  <option value="Visual Production">Visual Production</option>
-                  <option value="SEO">SEO</option>
-                  <option value="Performance Marketing">Performance Marketing</option>
-                  <option value="Brand Management">Brand Management</option>
-                  <option value="Website">Website</option>
-                </select>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-              >
-                <textarea
-                  placeholder="Tell us about your project..."
-                  rows={4}
-                  value={formState.message}
-                  onChange={(e) => {
-                    setFormState({ ...formState, message: e.target.value });
-                    if (errors.message) setErrors({ ...errors, message: false });
-                  }}
-                  className={`w-full bg-black border ${errors.message ? 'border-red-500' : 'border-white/20'} text-white px-4 py-4 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none`}
-                  data-testid="input-message"
-                />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
-              >
-                <button
-                  type="submit"
-                  disabled={status === "loading" || status === "success"}
-                  className="w-full bg-primary text-black font-bold text-lg py-4 rounded-lg hover:bg-white transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                  data-testid="button-submit-contact"
-                >
-                  {status === "loading" ? (
-                    <div className="w-6 h-6 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                  ) : status === "success" ? (
-                    "Sent!"
-                  ) : (
-                    "Send It →"
-                  )}
-                </button>
-                {status === "success" && (
-                  <p className="text-primary text-center mt-4 font-medium" data-testid="text-success-msg">
-                    Message sent! We'll get back to you.
-                  </p>
-                )}
-              </motion.div>
-            </form>
-          </div>
-
-          {/* Info Side */}
-          <div className="flex flex-col justify-center lg:pl-12">
-            <div className="space-y-12">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <h4 className="text-white/50 text-sm font-bold uppercase tracking-widest mb-2">Reach Out</h4>
-                <a href="mailto:hello@resoch.com" className="text-3xl text-white hover:text-primary transition-colors font-serif block mb-2">hello@resoch.com</a>
-                <a href="tel:+1234567890" className="text-xl text-white/70 hover:text-primary transition-colors block">+1 (234) 567-890</a>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-              >
-                <h4 className="text-white/50 text-sm font-bold uppercase tracking-widest mb-6">Socials</h4>
-                <div className="flex gap-6">
-                  <a href="#" className="text-white hover:text-primary hover:-translate-y-1 transition-all duration-300" data-testid="link-social-ig">
-                    <SiInstagram size={28} />
-                  </a>
-                  <a href="#" className="text-white hover:text-primary hover:-translate-y-1 transition-all duration-300" data-testid="link-social-li">
-                    <FaLinkedinIn size={28} />
-                  </a>
-                  <a href="#" className="text-white hover:text-primary hover:-translate-y-1 transition-all duration-300" data-testid="link-social-x">
-                    <SiX size={28} />
-                  </a>
-                  <a href="#" className="text-white hover:text-primary hover:-translate-y-1 transition-all duration-300" data-testid="link-social-yt">
-                    <SiYoutube size={32} />
-                  </a>
-                </div>
-              </motion.div>
-            </div>
-          </div>
+          <p className="text-primary text-[11px] font-bold uppercase tracking-widest mb-2">Get In Touch</p>
+          <h2 className="text-3xl md:text-5xl font-serif font-bold text-white">
+            Let's <span className="text-primary">Talk.</span>
+          </h2>
         </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-14">
+          {/* Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <form onSubmit={handleSubmit} className="space-y-4" data-testid="form-contact">
+              <input
+                type="text"
+                placeholder="Your Name"
+                value={formState.name}
+                onChange={(e) => { setFormState({ ...formState, name: e.target.value }); if (errors.name) setErrors({ ...errors, name: false }); }}
+                className={`${inputBase} ${errors.name ? "border-red-500" : "border-white/15 focus:border-primary"}`}
+                data-testid="input-name"
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                value={formState.email}
+                onChange={(e) => { setFormState({ ...formState, email: e.target.value }); if (errors.email) setErrors({ ...errors, email: false }); }}
+                className={`${inputBase} ${errors.email ? "border-red-500" : "border-white/15 focus:border-primary"}`}
+                data-testid="input-email"
+              />
+              <select
+                value={formState.service}
+                onChange={(e) => { setFormState({ ...formState, service: e.target.value }); if (errors.service) setErrors({ ...errors, service: false }); }}
+                className={`${inputBase} appearance-none ${errors.service ? "border-red-500" : "border-white/15 focus:border-primary"} ${!formState.service ? "text-white/35" : "text-white"}`}
+                data-testid="input-service"
+              >
+                <option value="" disabled>Select a Service</option>
+                <option value="Social Media">Social Media Strategy</option>
+                <option value="Copy & Design">Copy &amp; Design</option>
+                <option value="Visual Production">Visual Production</option>
+                <option value="SEO">SEO</option>
+                <option value="Performance Marketing">Performance Marketing</option>
+                <option value="Brand Management">Brand Management</option>
+                <option value="Website">Web Development</option>
+              </select>
+              <textarea
+                placeholder="Tell us about your project..."
+                rows={4}
+                value={formState.message}
+                onChange={(e) => { setFormState({ ...formState, message: e.target.value }); if (errors.message) setErrors({ ...errors, message: false }); }}
+                className={`${inputBase} resize-none ${errors.message ? "border-red-500" : "border-white/15 focus:border-primary"}`}
+                data-testid="input-message"
+              />
+              <button
+                type="submit"
+                disabled={status === "loading" || status === "success"}
+                className="w-full bg-primary text-black font-bold text-base py-4 rounded-xl hover:bg-white transition-colors flex items-center justify-center gap-2 disabled:opacity-70 active:scale-95 touch-manipulation"
+                data-testid="button-submit-contact"
+              >
+                {status === "loading" ? (
+                  <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                ) : status === "success" ? "Sent! We'll be in touch." : "Send It →"}
+              </button>
+              {status === "success" && (
+                <p className="text-primary text-center text-sm font-medium" data-testid="text-success-msg">
+                  Your message is on its way!
+                </p>
+              )}
+            </form>
+          </motion.div>
+
+          {/* Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex flex-col gap-8 justify-center"
+          >
+            <div>
+              <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-3">Reach Out</p>
+              <a href="mailto:hello@resoch.com" className="text-xl md:text-2xl text-white hover:text-primary transition-colors font-serif block mb-1 break-all">
+                hello@resoch.com
+              </a>
+              <a href="tel:+1234567890" className="text-base text-white/60 hover:text-primary transition-colors">
+                +1 (234) 567-890
+              </a>
+            </div>
+
+            <div>
+              <p className="text-white/40 text-xs font-bold uppercase tracking-widest mb-4">Follow Us</p>
+              <div className="flex gap-4">
+                {[
+                  { icon: <SiInstagram size={20} />, testid: "link-social-ig" },
+                  { icon: <FaLinkedinIn size={20} />, testid: "link-social-li" },
+                  { icon: <SiX size={18} />, testid: "link-social-x" },
+                  { icon: <SiYoutube size={22} />, testid: "link-social-yt" },
+                ].map(({ icon, testid }) => (
+                  <a
+                    key={testid}
+                    href="#"
+                    data-testid={testid}
+                    className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/70 hover:border-primary hover:text-primary hover:bg-primary/10 transition-all duration-300 touch-manipulation"
+                  >
+                    {icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Tagline box */}
+            <div className="border border-primary/20 rounded-2xl p-5 bg-primary/5">
+              <p className="text-white/80 text-sm leading-relaxed italic">
+                "We don't just run campaigns — we rethink them from the ground up. Let's build something your competitors will be talking about."
+              </p>
+              <p className="text-primary text-xs font-bold mt-3">— The Re.Soch Team</p>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
