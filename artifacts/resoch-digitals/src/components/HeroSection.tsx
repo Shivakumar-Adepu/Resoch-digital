@@ -1,30 +1,32 @@
-import { useRef } from "react";
-
 export default function HeroSection() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
   return (
     <section
       id="hero"
       className="relative w-full overflow-hidden bg-black"
       style={{ height: "100svh" }}
     >
+      {/* Desktop & Tablet Video (hidden on mobile) */}
       <video
-        ref={videoRef}
         autoPlay
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        data-testid="video-hero"
+        className="hidden md:block absolute inset-0 w-full h-full object-cover"
+        data-testid="video-hero-desktop"
       >
-        {/* To use YOUR OWN VIDEO: upload your .mp4 file to artifacts/resoch-digitals/public/
-            and change the src below to "/hero-intro.mp4" */}
-        <source
-          src="/images/motion%20horizontal.mp4"
-          type="video/mp4"
-        />
-        {/* Fallback: if the video above fails to load, the black background shows */}
+        <source src="/images/all_views_motion%20horizontal.mp4" type="video/mp4" />
+      </video>
+
+      {/* Mobile Video (hidden on desktop/tablet) */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="md:hidden absolute inset-0 w-full h-full object-cover"
+        data-testid="video-hero-mobile"
+      >
+        <source src="/images/mobile_view_resoch%20motion_3.mp4" type="video/mp4" />
       </video>
     </section>
   );
