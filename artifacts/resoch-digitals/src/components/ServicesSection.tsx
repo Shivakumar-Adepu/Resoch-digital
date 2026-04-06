@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { X } from "lucide-react";
 
 const services = [
@@ -9,7 +9,8 @@ const services = [
     role: "Social Media Strategy",
     tagline: "Rethinking 'Content' as 'Culture'",
     desc: "Moving faster than the speed of the algorithm, this speedster spots viral waves before they crest. Armed with Omni-Present vision, they dominate every timeline. Arch-nemesis: 'The Cringe.'",
-    image: "/images/team/trend-surfer.png",
+    imageBW: "/images/team/trend-surfer.png",
+    imageColor: "/images/team/trend-surfer.png",
   },
   {
     number: "02",
@@ -17,7 +18,8 @@ const services = [
     role: "Copy & Design Production",
     tagline: "Rethinking 'Content' as 'Investment'",
     desc: "Using psionic aesthetics and telepathic headlines, this illusionist seizes total control of the user's attention. Battles 'Boring Content' with a single, mind-bending snap.",
-    image: "/images/team/doctor-hypnosis.png",
+    imageBW: "/images/team/doctor-hypnosis.png",
+    imageColor: "/images/team/doctor-hypnosis.png",
   },
   {
     number: "03",
@@ -25,7 +27,8 @@ const services = [
     role: "Visual Production",
     tagline: "Rethinking 'Videos' as 'Experiences'",
     desc: "Wielding a lens forged from pure cinematic power, they bend mundane reality into blockbuster epics. Origin story: fell into a vat of 4K resolution.",
-    image: "/images/team/reality-warper.png",
+    imageBW: "/images/team/reality-warper.png",
+    imageColor: "/images/team/reality-warper.png",
   },
   {
     number: "04",
@@ -33,7 +36,8 @@ const services = [
     role: "SEO",
     tagline: "Rethinking 'Search' as 'Answers'",
     desc: "A master of stealth who lurks in the digital backend, hacking the Google Matrix. Infiltrates Page One silently, neutralizing competitors.",
-    image: "/images/team/shadow-operative.png",
+    imageBW: "/images/team/shadow-operative.png",
+    imageColor: "/images/team/shadow-operative.png",
   },
   {
     number: "05",
@@ -41,7 +45,8 @@ const services = [
     role: "Performance Marketing",
     tagline: "Rethinking 'Spend' as 'Investment'",
     desc: "Bionic aim locked on ROI, targeting high-value leads with zero wasted ammo on vanity metrics. Surgical precision ad spend.",
-    image: "/images/team/cyber-sniper.png",
+    imageBW: "/images/team/cyber-sniper.png",
+    imageColor: "/images/team/cyber-sniper.png",
   },
   {
     number: "06",
@@ -49,7 +54,8 @@ const services = [
     role: "Brand Management",
     tagline: "Your reputation, on a strategy",
     desc: "The indestructible shield-bearer, standing firm against internet negativity and cancel culture. Deploys Reputation Forcefield against PR disasters.",
-    image: "/images/team/captain-aegis.png",
+    imageBW: "/images/team/captain-aegis.png",
+    imageColor: "/images/team/captain-aegis.png",
   },
   {
     number: "07",
@@ -57,16 +63,115 @@ const services = [
     role: "Web Development",
     tagline: "More than a pretty face. A 24/7 salesperson.",
     desc: "If your site is mid, your customers are ghosting. We build aesthetic, glitch-free interfaces that pass the vibe check and secure the bag.",
-    image: "/images/team/web-developer.png",
+    imageBW: "/images/team/web-developer.png",
+    imageColor: "/images/team/web-developer.png",
   },
 ];
+
+/* Individual card with B&W → Color transition on hover (desktop) and scroll into view (mobile) */
+function ServiceCard({
+  service,
+  i,
+  isHovered,
+  isActive,
+  onPointerEnter,
+  onPointerLeave,
+  onClick,
+}: {
+  service: typeof services[0];
+  i: number;
+  isHovered: boolean;
+  isActive: boolean;
+  onPointerEnter: () => void;
+  onPointerLeave: () => void;
+  onClick: () => void;
+}) {
+  const cardRef = useRef<HTMLButtonElement>(null);
+  /* useInView: fires true when 60% of the card is in viewport — great for mobile scroll reveal */
+  const inViewport = useInView(cardRef, { margin: "-10% 0px -10% 0px" });
+
+  /* Show color if: hovered (desktop), active (tapped), or scrolled-into-view (mobile) */
+  const showColor = isHovered || isActive || inViewport;
+
+  return (
+    <motion.button
+      ref={cardRef}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-20px" }}
+      transition={{ delay: i * 0.05, duration: 0.35 }}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+      onClick={onClick}
+      className={`group relative rounded-xl overflow-hidden border text-left cursor-pointer focus:outline-none transition-colors duration-300 ${
+        showColor ? "border-primary" : "border-white/10"
+      }`}
+      data-testid={`card-service-${i}`}
+      aria-label={`${service.name} – ${service.role}`}
+    >
+      {/* Image container */}
+      <div className="relative aspect-square overflow-hidden bg-black">
+        {/* B&W base image (always rendered, fades out when color shows) */}
+        <img
+          src={service.imageBW}
+          alt={service.name}
+          loading="lazy"
+          className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out will-change-[opacity,filter,transform] grayscale brightness-60 ${
+            showColor ? "opacity-0 scale-105" : "opacity-100 scale-100"
+          }`}
+        />
+        {/* Color image (fades in on hover/in-view) */}
+        <img
+          src={service.imageColor}
+          alt={service.name}
+          loading="lazy"
+          className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out will-change-[opacity,transform] brightness-105 ${
+            showColor ? "opacity-100 scale-105" : "opacity-0 scale-100"
+          }`}
+        />
+
+        {/* Dark gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
+
+        {/* Number badge */}
+        <span className="absolute top-2 left-2 text-[10px] font-mono font-bold text-primary/80 bg-black/60 backdrop-blur-sm px-1.5 py-0.5 rounded-full z-10">
+          {service.number}
+        </span>
+
+        {/* Tap hint on mobile */}
+        <span className="md:hidden absolute top-2 right-2 text-[9px] font-bold text-white/40 bg-black/50 backdrop-blur-sm px-1.5 py-0.5 rounded-full z-10 uppercase tracking-wide">
+          tap
+        </span>
+
+        {/* Orange border glow */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-400 pointer-events-none ring-inset ring-2 ring-primary/50 rounded-xl ${
+            showColor ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      </div>
+
+      {/* Label */}
+      <div className="p-2.5 md:p-4 bg-black">
+        <p className="text-primary text-[9px] md:text-xs font-bold uppercase tracking-widest mb-0.5 truncate">
+          {service.role}
+        </p>
+        <h3
+          className={`text-xs md:text-base lg:text-lg font-serif font-bold leading-snug transition-colors duration-300 ${
+            showColor ? "text-primary" : "text-white"
+          }`}
+        >
+          {service.name}
+        </h3>
+      </div>
+    </motion.button>
+  );
+}
 
 export default function ServicesSection() {
   const [activeId, setActiveId] = useState<number | null>(null);
   const [hoveredId, setHoveredId] = useState<number | null>(null);
   const active = activeId !== null ? services[activeId] : null;
-
-  const isLit = (i: number) => hoveredId === i || activeId === i;
 
   return (
     <section id="services" className="py-16 md:py-28 bg-black relative overflow-hidden">
@@ -89,72 +194,22 @@ export default function ServicesSection() {
           </p>
         </motion.div>
 
-        {/* Card Grid — CSS-based grayscale (no heavy JS filter animation on mobile) */}
+        {/* Card Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
           {services.map((service, i) => (
-            <motion.button
+            <ServiceCard
               key={i}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-20px" }}
-              transition={{ delay: i * 0.05, duration: 0.35 }}
+              service={service}
+              i={i}
+              isHovered={hoveredId === i}
+              isActive={activeId === i}
               onPointerEnter={() => setHoveredId(i)}
               onPointerLeave={() => setHoveredId(null)}
               onClick={() => {
                 setActiveId(i);
                 setHoveredId(null);
               }}
-              className={`group relative rounded-xl overflow-hidden border text-left cursor-pointer focus:outline-none transition-colors duration-300 ${
-                isLit(i)
-                  ? "border-primary"
-                  : "border-white/10"
-              }`}
-              data-testid={`card-service-${i}`}
-              aria-label={`${service.name} – ${service.role}`}
-            >
-              {/* Image — CSS grayscale for smooth GPU-accelerated transition on all devices */}
-              <div className="relative aspect-square overflow-hidden bg-black">
-                <img
-                  src={service.image}
-                  alt={service.name}
-                  loading="lazy"
-                  className={`w-full h-full object-cover transition-all duration-500 ease-out will-change-[filter,transform] ${
-                    isLit(i)
-                      ? "grayscale-0 scale-105 brightness-105"
-                      : "grayscale brightness-75"
-                  }`}
-                />
-
-                {/* Dark gradient — fade at bottom */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
-
-                {/* Number badge */}
-                <span className="absolute top-2 left-2 text-[10px] font-mono font-bold text-primary/80 bg-black/60 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
-                  {service.number}
-                </span>
-
-                {/* Orange border glow — only on lit */}
-                <div
-                  className={`absolute inset-0 transition-opacity duration-400 pointer-events-none ring-inset ring-2 ring-primary/50 rounded-xl ${
-                    isLit(i) ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-              </div>
-
-              {/* Label */}
-              <div className="p-2.5 md:p-4 bg-black">
-                <p className="text-primary text-[9px] md:text-xs font-bold uppercase tracking-widest mb-0.5 truncate">
-                  {service.role}
-                </p>
-                <h3
-                  className={`text-xs md:text-base lg:text-lg font-serif font-bold leading-snug transition-colors duration-300 ${
-                    isLit(i) ? "text-primary" : "text-white"
-                  }`}
-                >
-                  {service.name}
-                </h3>
-              </div>
-            </motion.button>
+            />
           ))}
         </div>
       </div>
@@ -195,10 +250,10 @@ export default function ServicesSection() {
                 </button>
 
                 <div className="flex flex-col md:flex-row">
-                  {/* Square image */}
+                  {/* Color image in modal */}
                   <div className="w-full md:w-48 shrink-0 aspect-square relative">
                     <img
-                      src={active.image}
+                      src={active.imageColor}
                       alt={active.name}
                       className="w-full h-full object-cover"
                     />

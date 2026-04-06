@@ -21,8 +21,10 @@ export default function ProcessSection() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-6 md:gap-0 relative">
-          {/* Center Divider Line (Desktop) */}
+        {/* Desktop: side by side. Mobile: stacked with Re.Soch first */}
+        <div className="flex flex-col md:grid md:grid-cols-2 md:gap-0 gap-8 relative">
+
+          {/* Center Divider Line (Desktop only) */}
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] -translate-x-1/2">
             <motion.div
               initial={{ scaleY: 0 }}
@@ -33,40 +35,8 @@ export default function ProcessSection() {
             />
           </div>
 
-          {/* Left Column: Standard Way */}
-          <div className="md:pr-12">
-            <h3 className="text-sm md:text-lg font-bold text-white/40 text-center mb-6 md:mb-8 uppercase tracking-wider">
-              Standard Way
-            </h3>
-            <div className="flex flex-col items-center gap-3 md:gap-4">
-              {standardSteps.map((step, i) => (
-                <motion.div
-                  key={step}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.4 }}
-                  className="w-full"
-                >
-                  <div className="bg-white/5 border border-white/10 rounded-lg p-3 md:p-4 text-center text-white/40 font-medium text-sm md:text-base">
-                    {step}
-                  </div>
-                  {i < standardSteps.length - 1 && (
-                    <div className="flex justify-center py-1 text-white/20 text-lg">↓</div>
-                  )}
-                </motion.div>
-              ))}
-              <div className="mt-3 relative inline-block">
-                <span className="bg-white/10 text-white/40 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
-                  Boring
-                </span>
-                <div className="absolute left-0 top-1/2 w-full h-[2px] bg-primary/60 -rotate-6" />
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Re.Soch Way */}
-          <div className="md:pl-12">
+          {/* Re.Soch Way — order-1 on mobile (shows first), normal on desktop */}
+          <div className="order-1 md:order-2 md:pl-12">
             <h3 className="text-sm md:text-lg font-bold text-primary text-center mb-6 md:mb-8 uppercase tracking-wider drop-shadow-[0_0_8px_rgba(255,136,88,0.5)]">
               Re.Soch Way
             </h3>
@@ -102,6 +72,38 @@ export default function ProcessSection() {
                 >
                   Iconic
                 </motion.span>
+              </div>
+            </div>
+          </div>
+
+          {/* Standard Way — order-2 on mobile (shows second), normal on desktop */}
+          <div className="order-2 md:order-1 md:pr-12">
+            <h3 className="text-sm md:text-lg font-bold text-white/40 text-center mb-6 md:mb-8 uppercase tracking-wider">
+              Standard Way
+            </h3>
+            <div className="flex flex-col items-center gap-3 md:gap-4">
+              {standardSteps.map((step, i) => (
+                <motion.div
+                  key={step}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.4 }}
+                  className="w-full"
+                >
+                  <div className="bg-white/5 border border-white/10 rounded-lg p-3 md:p-4 text-center text-white/40 font-medium text-sm md:text-base">
+                    {step}
+                  </div>
+                  {i < standardSteps.length - 1 && (
+                    <div className="flex justify-center py-1 text-white/20 text-lg">↓</div>
+                  )}
+                </motion.div>
+              ))}
+              <div className="mt-3 relative inline-block">
+                <span className="bg-white/10 text-white/40 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
+                  Boring
+                </span>
+                <div className="absolute left-0 top-1/2 w-full h-[2px] bg-primary/60 -rotate-6" />
               </div>
             </div>
           </div>
