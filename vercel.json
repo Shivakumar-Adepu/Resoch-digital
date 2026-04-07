@@ -1,12 +1,8 @@
 {
   "buildCommand": "pnpm run build",
   "installCommand": "pnpm install",
+  "outputDirectory": "artifacts/api-server/dist",
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "artifacts/api-server/**": {
-      "runtime": "nodejs20.x"
-    }
   }
 }
