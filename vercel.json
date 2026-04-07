@@ -1,18 +1,5 @@
 {
   "buildCommand": "pnpm run build",
   "installCommand": "pnpm install",
-  "framework": "vite",
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "destination": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "destination": "/artifacts/resoch-digitals/dist/index.html"
-    }
-  ]
+  "outputDirectory": "artifacts/resoch-digitals/dist/public"
 }
